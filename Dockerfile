@@ -16,13 +16,19 @@ COPY --chown=django:django djangotutorial /app
 ENV PORT=8080 
 ENV STUDNET_NAME="Marcos Della"
 ENV SITE_NAME="cis-92.geekstyle.net"
-ENV SECRET_KEY="fixme-54321"
+ENV SECRET_KEY="fixme-54321-12345"
 ENV DEBUG=1
 ENV DATA_DIR="/data"
 ENV PORT=8080
-ENV DJANGO_SUPERUSER_USERNAME="admin"
+ENV DJANGO_SUPERUSER_USERNAME="test"
 ENV DJANGO_SUPERUSER_PASSWORD="test"
 ENV DJANGO_SUPERUSER_EMAIL="test@test.test"
+
+# Create the data directory
+RUN mkdir $DATA_DIR && chown django:django $DATA_DIR
+
+# Switch to the new user
+USER django
 
 # Set the working directory
 WORKDIR /app 
