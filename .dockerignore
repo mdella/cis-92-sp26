@@ -1,5 +1,36 @@
 **/*.sqlite3
+.ssh/
+Makefile
+README.md
+
+# Ignore cache and virtual environments
+*.pyc
+*.pyo
+*.pyd
 **/__pycache__
-.gitignore
+.env
+.env/
 .venv*
 .venv/
+*.log
+
+# Ignore version control directories
+.git
+.github
+.gitignore
+
+# Ignore editor and IDE files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Ignore temporary and cache files
+tmp/
+.cache/
+*.bak
+
+# Ignore build artifacts
+build/
+dist/
+out/
