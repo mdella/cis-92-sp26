@@ -36,3 +36,4 @@ WORKDIR /app
 # Default command to execute in the container
 RUN chmod 755 /app/start.sh
 CMD ["/bin/sh", "-c", "./start.sh"]
+
