@@ -55,44 +55,69 @@ kubectl apply -f deployment/config.yaml
 kubectl apply -f deployment/secret.yaml
 ```
 
-**3. Apply the remaining deployment manifests:**
+**3. Apply the PersistentVolumeClaim (first time only):**
 
 ```bash
-kubectl apply -f deployment/
+kubectl apply -f deployment/pvc.yaml
 ```
 
-**4. Verify the pods are running:**
+This requests 1Gi of storage. Kubernetes will automatically provision and bind the volume. You only need to do this once — the PVC persists across pod restarts and redeployments.
+
+**4. Apply the Pod:**
+
+```bash
+kubectl apply -f deployment/pod.yaml
+```
+
+**5. Apply the Service:**
+
+```bash
+kubectl apply -f deployment/service.yaml
+```
+
+**6. Verify the pod is running:**
 
 ```bash
 kubectl get pods
 ```
 
-Wait until all pods show a status of `Running`.
+Wait until `django-pod` shows a status of `Running`.
 
-**5. Check the service to find the external address:**
+**7. Get the external IP address:**
 
 ```bash
 kubectl get services
 ```
 
-Once an `EXTERNAL-IP` is assigned, the application will be available at `http://<EXTERNAL-IP>:8080`.
+Once `django-svc` shows an `EXTERNAL-IP`, the application will be available at `http://<EXTERNAL-IP>`.
 
 ---
 
 ## Deleting the Application
 
-To remove all resources created by the deployment manifests, run:
+To remove the pod and service (but keep the PVC and its data intact):
 
 ```bash
-kubectl delete -f deployment/
+kubectl delete -f deployment/pod.yaml
+kubectl delete -f deployment/service.yaml
+kubectl delete -f deployment/config.yaml
+kubectl delete -f deployment/secret.yaml
 ```
 
-This will delete the Deployment, Service, ConfigMap, and Secret. To verify everything has been removed:
+To also permanently delete the PVC and all stored data:
 
 ```bash
-kubectl get all
-kubectl get configmap
-kubectl get secret
+kubectl delete -f deployment/pvc.yaml
+```
+
+> ⚠️ Deleting the PVC is irreversible — all data in the `/data` volume will be lost.
+
+To verify everything has been removed:
+
+```bash
+kubectl get pods
+kubectl get services
+kubectl get pvc
 ```
 
 ---
