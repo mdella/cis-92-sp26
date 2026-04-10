@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: django-container
-    image: ghcr.io/mdella/cis-92-sp26:milestone-5.1
+    image: ghcr.io/mdella/cis-92-sp26:milestone-5.2
     ports:
     - containerPort: 8080
     envFrom:
@@ -24,3 +24,12 @@ spec:
         cpu: 1000m 
         memory: 1024Mi
         ephemeral-storage: 10Mi
+    volumeMounts:
+    - name: db
+      mountPath: /data
+  volumes:
+    - name: db
+      persistentVolumeClaim:
+          claimName: django-data
+  securityContext:
+    fsGroup: 1000
