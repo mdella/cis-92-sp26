@@ -5,6 +5,7 @@ FROM docker.io/python:3.12.3
 # Install packages that are required. 
 RUN pip install psutil==7.2.2
 RUN pip install Django==6.0.1
+RUN pip install psycopg==3.3.3
 
 # Create a non-root user to run the application
 RUN useradd -d /app -M django
@@ -23,6 +24,10 @@ ENV PORT=8080
 ENV DJANGO_SUPERUSER_USERNAME="test"
 ENV DJANGO_SUPERUSER_PASSWORD="test"
 ENV DJANGO_SUPERUSER_EMAIL="test@test.test"
+ENV POSTGRES_DB="mysite"
+ENV POSTGRES_USER="mysiteuser"
+ENV POSTGRES_PASSWORD="this-is-a-bad-password"
+ENV POSTGRES_HOSTNAME="localhost"
 
 # Create the data directory
 RUN mkdir $DATA_DIR && chown django:django $DATA_DIR
