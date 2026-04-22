@@ -73,6 +73,16 @@ Once the chart is deployed, note the service name Helm assigns (typically `postg
 
 These instructions assume you have `kubectl` configured and pointed at your cluster, and that PostgreSQL is already running (see above).
 
+To apply all manifests in a single step:
+
+```bash
+kubectl apply -f deployment/
+```
+
+> **Note:** On first deployment, this includes the PVC. On subsequent deployments you may want to apply files individually (see below) to avoid reapplying the PVC unnecessarily, though reapplying it is harmless if it already exists.
+
+Alternatively, apply each manifest individually:
+
 **1. Apply the ConfigMap:**
 
 ```bash
