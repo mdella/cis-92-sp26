@@ -34,14 +34,44 @@ The application is configured through two Kubernetes manifests in the `deploymen
 | `DJANGO_SUPERUSER_USERNAME` | `testing` | Django admin superuser username |
 | `DJANGO_SUPERUSER_EMAIL` | `testing@testing.com` | Django admin superuser email |
 | `DJANGO_SUPERUSER_PASSWORD` | `testing` | Django admin superuser password |
+| `POSTGRES_USER` | `mysiteuser` | PostgreSQL database username |
+| `POSTGRES_PASSWORD` | `this-is-a-bad-password` | PostgreSQL database password |
 
 > ⚠️ **Security Note:** The values in `secret.yaml` are base64-encoded placeholders. Replace them with strong, unique values before deploying to any non-development environment. Never commit real secrets to version control.
+
+### PostgreSQL Environment Variables
+
+The following variables configure the PostgreSQL connection. They can be set as Dockerfile defaults or overridden via ConfigMap/Secret:
+
+| Variable Name | Default Value | Description |
+|---|---|---|
+| `POSTGRES_DB` | `mysite` | PostgreSQL database name |
+| `POSTGRES_USER` | `mysiteuser` | PostgreSQL username (also in Secret) |
+| `POSTGRES_PASSWORD` | `this-is-a-bad-password` | PostgreSQL password (also in Secret) |
+| `POSTGRES_HOSTNAME` | `localhost` | PostgreSQL host |
+
+---
+
+## Setting Up PostgreSQL (Manual Prerequisite)
+
+PostgreSQL is **not** included in the automated Kubernetes deployment. You must provision it manually before deploying the app. A Helm values file (`values-postgres.yaml`) is provided for this purpose.
+
+Install PostgreSQL using the Bitnami Helm chart:
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install postgres bitnami/postgresql -f values-postgres.yaml
+```
+
+Once the chart is deployed, note the service name Helm assigns (typically `postgres-postgresql`). Set `POSTGRES_HOSTNAME` in your ConfigMap to match. The database must be reachable from the pod before the app will start successfully.
+
+> ⚠️ The credentials in `values-postgres.yaml` are placeholders. Update them (and the matching values in `secret.yaml`) before deploying to any non-development environment.
 
 ---
 
 ## Deploying on Kubernetes
 
-These instructions assume you have `kubectl` configured and pointed at your cluster.
+These instructions assume you have `kubectl` configured and pointed at your cluster, and that PostgreSQL is already running (see above).
 
 **1. Apply the ConfigMap:**
 
